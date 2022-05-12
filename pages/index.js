@@ -1,11 +1,13 @@
 import Head from 'next/head';
 import { useState } from 'react';
+import { PulseLoader } from 'react-spinners';
 
 import Layout from '../components/Layout';
 
 export default function Home() {
   const [request, setRequest] = useState('');
   const [aiResponse, setAiResponse] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setRequest(e.target.value);
@@ -13,6 +15,7 @@ export default function Home() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     getResponse(request);
   };
 
@@ -29,6 +32,7 @@ export default function Home() {
       .then((info) => {
         console.log(info);
         setAiResponse(info[0].text);
+        setLoading(false);
       });
   };
 
@@ -54,7 +58,10 @@ export default function Home() {
           </button>
         </form>
 
-        <div>{aiResponse}</div>
+        <div>
+          {loading && <PulseLoader loading={loading} color="lightblue" />}
+          {aiResponse}
+        </div>
       </Layout>
     </>
   );
