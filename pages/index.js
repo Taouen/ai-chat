@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import { PulseLoader } from 'react-spinners';
-import { v4 as uuid4 } from 'uuid';
 
 import Layout from '../components/Layout';
 import ResponsePair from '../components/ResponsePair';
