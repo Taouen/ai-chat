@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import { PulseLoader } from 'react-spinners';
+import { v4 as uuid4 } from 'uuid';
 
 import Layout from '../components/Layout';
 import ResponsePair from '../components/ResponsePair';
@@ -19,6 +20,7 @@ export default function Home() {
     e.preventDefault();
 
     const requests = [...prevRequests];
+
     requests.unshift(request);
     setPrevRequests(requests); // add current request to the array of previous requests
 
@@ -56,22 +58,32 @@ export default function Home() {
         />
       </Head>
       <Layout>
-        <form onSubmit={handleSubmit} className="flex">
-          <textarea
-            className="border rounded-lg border-black m-2 p-2 resize-none h-auto"
+        <form
+          onSubmit={handleSubmit}
+          className="flex fixed bottom-0 w-full max-w-screen-sm bg-white"
+        >
+          <input
+            className="border rounded-lg border-black m-2 p-2 resize-none w-4/5 h-12 focus:outline-none focus:ring focus:border-blue-500 active:border-blue-500"
             value={request}
             onChange={handleChange}
           />
-          <button className="border rounded-lg p-2 m-2" type="submit">
-            Submit
+          <button
+            className="border rounded-lg p-2 m-2 w-1/5 bg-blue-500 text-white"
+            type="submit"
+          >
+            Send
           </button>
         </form>
 
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full max-w-screen-sm ">
           {loading && <PulseLoader loading={loading} color="lightblue" />}
           {prevRequests.map((prompt, index) => {
             return (
-              <ResponsePair prompt={prompt} response={aiResponses[index]} />
+              <ResponsePair
+                key={prompt}
+                prompt={prompt}
+                response={aiResponses[index]}
+              />
             );
           })}
         </div>
