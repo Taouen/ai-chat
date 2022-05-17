@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import { PulseLoader } from 'react-spinners';
 
 import Layout from '../components/Layout';
 import ResponsePair from '../components/ResponsePair';
@@ -20,7 +19,7 @@ export default function Home() {
 
     const requests = [...prevRequests];
 
-    requests.unshift(request);
+    requests.push(request);
     setPrevRequests(requests); // add current request to the array of previous requests
 
     setRequest(''); // Reset input field to blank
@@ -40,7 +39,7 @@ export default function Home() {
     })
       .then((data) => data.json())
       .then((info) => {
-        responses.unshift(info[0].text);
+        responses.push(info[0].text);
         console.log(info);
         setAiResponses(responses);
         setLoading(false);
@@ -73,15 +72,16 @@ export default function Home() {
             Send
           </button>
         </form>
+        {/* flex flex-col h-screen overflow-y-scroll justify-end pb-16 w-full max-w-screen-sm */}
 
-        <div className="flex flex-col items-center w-full max-w-screen-sm ">
-          {loading && <PulseLoader loading={loading} color="lightblue" />}
+        <div className="flex flex-col  w-full max-w-screen-sm pb-16">
           {prevRequests.map((prompt, index) => {
             return (
               <ResponsePair
                 key={prompt}
                 prompt={prompt}
                 response={aiResponses[index]}
+                loading={loading}
               />
             );
           })}
