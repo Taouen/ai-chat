@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 import Layout from '../components/Layout';
 import ResponsePair from '../components/ResponsePair';
@@ -18,19 +19,25 @@ export default function Home() {
     e.preventDefault();
 
     const requests = [...prevRequests];
+    const id = uuid();
 
-    requests.push(request);
+    const prompt = {
+      id: id,
+      text: request,
+    };
+
+    requests.unshift(prompt);
     setPrevRequests(requests); // add current request to the array of previous requests
 
     setRequest(''); // Reset input field to blank
     setLoading(true);
-    getResponse(request);
+    getResponse(request, id);
   };
 
-  const getResponse = async (request) => {
+  const getResponse = async (request, id) => {
     const data = { request };
     const responses = [...aiResponses];
-    const response = await fetch('/api/openAiResponse', {
+    fetch('/api/openAiResponse', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -39,8 +46,11 @@ export default function Home() {
     })
       .then((data) => data.json())
       .then((info) => {
-        responses.push(info[0].text);
-        console.log(info);
+        const reply = {
+          id: id,
+          text: info[0].text,
+        };
+        responses.unshift(reply);
         setAiResponses(responses);
         setLoading(false);
       });
@@ -56,11 +66,27 @@ export default function Home() {
         />
       </Head>
       <Layout>
+        {/* Messages container */}
+        <div className="flex flex-col-reverse grow w-full max-w-screen-sm overflow-scroll scrollbar-hide">
+          {prevRequests.map((prompt, index) => {
+            const reply = aiResponses.filter((obj) => obj.id === prompt.id)[0];
+            return (
+              <ResponsePair
+                key={prompt.id}
+                prompt={prompt.text}
+                response={reply ? reply.text : null}
+                loading={loading}
+              />
+            );
+          })}
+        </div>
+
         <form
           onSubmit={handleSubmit}
-          className="flex fixed bottom-0 w-full max-w-screen-sm bg-white"
+          className="flex w-full max-w-screen-sm bg-white"
         >
           <input
+            aria-label="Enter propmt"
             className="border rounded-lg border-black m-2 p-2 resize-none w-4/5 h-12 focus:outline-none focus:ring focus:border-blue-500 active:border-blue-500"
             value={request}
             onChange={handleChange}
@@ -72,20 +98,6 @@ export default function Home() {
             Send
           </button>
         </form>
-        {/* flex flex-col h-screen overflow-y-scroll justify-end pb-16 w-full max-w-screen-sm */}
-
-        <div className="flex flex-col  w-full max-w-screen-sm pb-16">
-          {prevRequests.map((prompt, index) => {
-            return (
-              <ResponsePair
-                key={prompt}
-                prompt={prompt}
-                response={aiResponses[index]}
-                loading={loading}
-              />
-            );
-          })}
-        </div>
       </Layout>
     </>
   );
