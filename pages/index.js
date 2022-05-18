@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import Layout from '../components/Layout';
@@ -67,7 +67,11 @@ export default function Home() {
       </Head>
       <Layout>
         {/* Messages container */}
-        <div className="flex flex-col-reverse grow w-full max-w-screen-sm overflow-scroll scrollbar-hide">
+        <div className="flex w-full h-16 p-2 bg-gray-100 border-b border-gray-300 justify-center items-center text-xl">
+          AI
+        </div>
+
+        <div className="flex px-4 flex-col-reverse grow w-full max-w-screen-sm overflow-scroll scrollbar-hide">
           {prevRequests.map((prompt, index) => {
             const reply = aiResponses.filter((obj) => obj.id === prompt.id)[0];
             return (
