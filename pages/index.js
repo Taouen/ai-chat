@@ -4,12 +4,14 @@ import { v4 as uuid } from 'uuid';
 
 import Layout from '../components/Layout';
 import ResponsePair from '../components/ResponsePair';
+import SettingsMenu from '../components/SettingsMenu';
 
 export default function Home() {
   const [request, setRequest] = useState('');
   const [prevRequests, setPrevRequests] = useState([]);
   const [aiResponses, setAiResponses] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [chatColor, setChatColor] = useState('#BFDBFE');
 
   const handleChange = (e) => {
     setRequest(e.target.value);
@@ -69,6 +71,7 @@ export default function Home() {
         {/* Messages container */}
         <div className="flex w-full h-16 p-2 bg-gray-100 border-b border-gray-300 justify-center items-center text-xl">
           AI
+          <SettingsMenu chatColor={chatColor} setChatColor={setChatColor} />
         </div>
 
         <div className="flex px-4 flex-col-reverse grow w-full max-w-screen-sm overflow-scroll scrollbar-hide">
@@ -80,6 +83,7 @@ export default function Home() {
                 prompt={prompt.text}
                 response={reply ? reply.text : null}
                 loading={loading}
+                chatColor={chatColor}
               />
             );
           })}
@@ -96,7 +100,7 @@ export default function Home() {
             onChange={handleChange}
           />
           <button
-            className="border rounded-lg p-2 m-2 w-1/5 bg-blue-500 text-white"
+            className="border rounded-lg p-2 m-2 w-1/5 bg-blue-600 hover:bg-blue-400 text-white"
             type="submit"
           >
             Send
