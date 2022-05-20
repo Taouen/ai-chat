@@ -1,10 +1,10 @@
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import Layout from '../components/Layout';
 import ResponsePair from '../components/ResponsePair';
-import SettingsMenu from '../components/SettingsMenu';
+import BasicMenu from '../components/Menu';
 
 export default function Home() {
   const [request, setRequest] = useState('');
@@ -69,9 +69,14 @@ export default function Home() {
       </Head>
       <Layout>
         {/* Messages container */}
-        <div className="flex w-full h-16 p-2 bg-gray-100 border-b border-gray-300 justify-center items-center text-xl">
-          AI
-          <SettingsMenu chatColor={chatColor} setChatColor={setChatColor} />
+        <div className="flex w-full h-16 py-2 bg-gray-100 border-b border-gray-300 justify-center items-center text-xl">
+          <div className="flex justify-center w-full max-w-screen-sm">
+            <div className="w-1/4"></div>
+            <div className="w-1/2">AI</div>
+            <div className="w-1/4 flex justify-end">
+              <BasicMenu chatColor={chatColor} setChatColor={setChatColor} />
+            </div>
+          </div>
         </div>
 
         <div className="flex px-4 flex-col-reverse grow w-full max-w-screen-sm overflow-scroll scrollbar-hide">
@@ -100,7 +105,25 @@ export default function Home() {
             onChange={handleChange}
           />
           <button
-            className="border rounded-lg p-2 m-2 w-1/5 bg-blue-600 hover:bg-blue-400 text-white"
+            className={` rounded-lg p-2 m-2 w-1/5 bg-blue-600 hover:bg-blue-400 text-white  ${
+              chatColor == '#FECACA'.toLowerCase()
+                ? 'bg-red-600 hover:bg-red-400'
+                : chatColor == '#FED7AA'.toLowerCase()
+                ? 'bg-orange-600 hover:bg-orange-400'
+                : chatColor == '#FEF08A'.toLowerCase()
+                ? 'bg-yellow-400 hover:bg-yellow-300 text-black'
+                : chatColor == '#BBF7D0'.toLowerCase()
+                ? 'bg-green-600 hover:bg-green-400'
+                : chatColor == '#A5F3FC'.toLowerCase()
+                ? 'bg-cyan-600 hover:bg-cyan-400'
+                : chatColor == '#BFDBFE'.toLowerCase()
+                ? 'bg-blue-600 hover:bg-blue-400'
+                : chatColor == '#DDD6FE'.toLowerCase()
+                ? 'bg-violet-600 hover:bg-violet-400'
+                : chatColor == '#FBCFE8'.toLowerCase()
+                ? 'bg-pink-600 hover:bg-pink-400'
+                : 'bg-blue-600 hover:bg-blue-400'
+            }`}
             type="submit"
           >
             Send

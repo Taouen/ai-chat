@@ -6,7 +6,7 @@ const ResponsePair = ({ prompt, response, chatColor }) => {
     <div className="flex flex-col w-full">
       <PromptBubble prompt={prompt} chatColor={chatColor} />
 
-      <ResponseBubble response={response} />
+      <ResponseBubble response={response} chatColor={chatColor} />
     </div>
   );
 };
