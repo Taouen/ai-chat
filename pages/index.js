@@ -10,7 +10,6 @@ export default function Home() {
   const [request, setRequest] = useState(''); // curent value of input element
   const [prevRequests, setPrevRequests] = useState([]); // previous requests sent to AI
   const [aiResponses, setAiResponses] = useState([]); // previous responses from AI
-  const [loading, setLoading] = useState(false);
   const [chatColor, setChatColor] = useState('#BFDBFE');
 
   const handleChange = (e) => {
@@ -51,6 +50,16 @@ export default function Home() {
         responses.unshift(reply);
         setAiResponses(responses);
         setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        const reply = {
+          id: id,
+          text: 'error',
+        };
+        responses.unshift(reply);
+        setAiResponses(responses);
+        setLoading(false);
       });
   };
 
@@ -86,7 +95,6 @@ export default function Home() {
                 key={prompt.id}
                 prompt={prompt.text}
                 response={reply ? reply.text : null}
-                loading={loading}
                 chatColor={chatColor}
               />
             );

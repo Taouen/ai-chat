@@ -1,6 +1,6 @@
 import { PulseLoader } from 'react-spinners';
 
-const ResponsePair = ({ prompt, response, chatColor }) => {
+const ResponsePair = ({ prompt, response, chatColor, error }) => {
   return (
     <div className="flex flex-col w-full">
       {/* Prompt Bubble */}
@@ -31,7 +31,15 @@ const ResponsePair = ({ prompt, response, chatColor }) => {
 
       {/* Response Bubble */}
       <div className="flex justify-center items-center rounded-lg p-2 my-2 w-max max-w-[80%] bg-gray-200 w-full self-start text-left break-words">
-        {response ? response : <PulseLoader color={chatColor} />}
+        {response ? (
+          response === 'error' ? (
+            'I was unable to think of a response'
+          ) : (
+            response
+          )
+        ) : (
+          <PulseLoader color={chatColor} />
+        )}
       </div>
     </div>
   );
