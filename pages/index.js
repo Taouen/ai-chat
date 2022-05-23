@@ -7,9 +7,9 @@ import ResponsePair from '../components/ResponsePair';
 import BasicMenu from '../components/Menu';
 
 export default function Home() {
-  const [request, setRequest] = useState('');
-  const [prevRequests, setPrevRequests] = useState([]);
-  const [aiResponses, setAiResponses] = useState([]);
+  const [request, setRequest] = useState(''); // curent value of input element
+  const [prevRequests, setPrevRequests] = useState([]); // previous requests sent to AI
+  const [aiResponses, setAiResponses] = useState([]); // previous responses from AI
   const [loading, setLoading] = useState(false);
   const [chatColor, setChatColor] = useState('#BFDBFE');
 
@@ -19,18 +19,14 @@ export default function Home() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const requests = [...prevRequests];
     const id = uuid();
-
     const prompt = {
       id: id,
       text: request,
     };
-
     requests.unshift(prompt);
     setPrevRequests(requests); // add current request to the array of previous requests
-
     setRequest(''); // Reset input field to blank
     setLoading(true);
     getResponse(request, id);
@@ -68,20 +64,23 @@ export default function Home() {
         />
       </Head>
       <Layout>
-        {/* Messages container */}
         <div className="flex w-full h-16 py-2 bg-gray-100 border-b border-gray-300 justify-center items-center text-xl">
           <div className="flex justify-center w-full max-w-screen-sm">
             <div className="w-1/4"></div>
-            <div className="w-1/2">AI</div>
+            {/* This is here to maintain balance of the title bar, to allow the name to maintain center position. */}
+            <div className="w-1/2">
+              <h1 aria-label="Chat Name">AI</h1>
+            </div>
             <div className="w-1/4 flex justify-end">
               <BasicMenu chatColor={chatColor} setChatColor={setChatColor} />
             </div>
           </div>
         </div>
 
+        {/* Messages container */}
         <div className="flex px-4 flex-col-reverse grow w-full max-w-screen-sm overflow-scroll scrollbar-hide">
           {prevRequests.map((prompt, index) => {
-            const reply = aiResponses.filter((obj) => obj.id === prompt.id)[0];
+            const reply = aiResponses.filter((obj) => obj.id === prompt.id)[0]; // id ensures that the correctly matched prompt and response are passed to the ResponsePair component.
             return (
               <ResponsePair
                 key={prompt.id}
@@ -99,7 +98,7 @@ export default function Home() {
           className="flex w-full max-w-screen-sm bg-white"
         >
           <input
-            aria-label="Enter propmt"
+            aria-label="Enter prompt"
             className="border rounded-lg border-black m-2 p-2 resize-none w-4/5 h-12 focus:outline-none focus:ring focus:border-blue-500 active:border-blue-500"
             value={request}
             onChange={handleChange}

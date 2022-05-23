@@ -20,7 +20,6 @@ const ColorPicker = ({ chatColor, setChatColor }) => {
       ]}
       onChangeComplete={handleChangeComplete}
       width="85px"
-      // width="170px"
     />
   );
 };

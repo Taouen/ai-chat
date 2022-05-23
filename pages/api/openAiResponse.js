@@ -8,10 +8,10 @@ const openai = new OpenAIApi(configuration);
 export default async function handler(req, res) {
   const response = await openai.createCompletion('text-curie-001', {
     prompt: req.body.request,
-    temperature: 0.7,
+    temperature: 0.5,
     max_tokens: 64,
     top_p: 1.0,
-    frequency_penalty: 0.0,
+    frequency_penalty: 0.5,
     presence_penalty: 0.0,
   });
 

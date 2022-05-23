@@ -38,7 +38,7 @@ export default function BasicMenu({ chatColor, setChatColor }) {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem sx={{}}>
+        <MenuItem>
           <ColorPicker chatColor={chatColor} setChatColor={setChatColor} />
         </MenuItem>
       </Menu>
