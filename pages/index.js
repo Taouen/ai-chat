@@ -27,7 +27,6 @@ export default function Home() {
     requests.unshift(prompt);
     setPrevRequests(requests); // add current request to the array of previous requests
     setRequest(''); // Reset input field to blank
-    setLoading(true);
     getResponse(request, id);
   };
 
@@ -49,7 +48,6 @@ export default function Home() {
         };
         responses.unshift(reply);
         setAiResponses(responses);
-        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
@@ -59,7 +57,6 @@ export default function Home() {
         };
         responses.unshift(reply);
         setAiResponses(responses);
-        setLoading(false);
       });
   };
 
