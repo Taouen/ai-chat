@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import Layout from '../components/Layout';
@@ -11,6 +11,30 @@ export default function Home() {
   const [prevRequests, setPrevRequests] = useState([]); // previous requests sent to AI
   const [aiResponses, setAiResponses] = useState([]); // previous responses from AI
   const [chatColor, setChatColor] = useState('#BFDBFE');
+  const [aiName, setAiName] = useState('');
+
+  useEffect(() => {
+    const names = [
+      'Ultron',
+      'HAL 9000',
+      'Agent Smith',
+      'J.A.R.V.I.S.',
+      'F.R.I.D.A.Y.',
+      'Data',
+      'Cortana',
+      'GlaDOS',
+      'Max Headroom',
+      'Deep Thought',
+      'Marvin the Paranoid Android',
+      'Skynet',
+    ];
+
+    const getRandomName = () => {
+      const randomIndex = Math.floor(Math.random() * names.length);
+      return names[randomIndex];
+    };
+    setAiName(getRandomName());
+  }, []);
 
   const handleChange = (e) => {
     setRequest(e.target.value);
@@ -70,21 +94,21 @@ export default function Home() {
         />
       </Head>
       <Layout>
-        <div className="flex w-full h-16 py-2 bg-gray-100 border-b border-gray-300 justify-center items-center text-xl">
+        <div className="flex items-center justify-center w-full h-16 py-2 text-xl bg-gray-100 border-b border-gray-300">
           <div className="flex justify-center w-full max-w-screen-sm">
             <div className="w-1/4"></div>
             {/* This is here to maintain balance of the title bar, to allow the name to maintain center position. */}
             <div className="w-1/2">
-              <h1 aria-label="Chat Name">AI</h1>
+              <h1 aria-label="Chat Name">{aiName}</h1>
             </div>
-            <div className="w-1/4 flex justify-end">
+            <div className="flex justify-end w-1/4">
               <BasicMenu chatColor={chatColor} setChatColor={setChatColor} />
             </div>
           </div>
         </div>
 
         {/* Messages container */}
-        <div className="flex px-4 flex-col-reverse grow w-full max-w-screen-sm overflow-scroll scrollbar-hide">
+        <div className="flex flex-col-reverse w-full max-w-screen-sm px-4 overflow-scroll grow scrollbar-hide">
           {prevRequests.map((prompt, index) => {
             const reply = aiResponses.filter((obj) => obj.id === prompt.id)[0]; // id ensures that the correctly matched prompt and response are passed to the ResponsePair component.
             return (
@@ -96,6 +120,9 @@ export default function Home() {
               />
             );
           })}
+          <div className="flex justify-center w-full mb-4 text-sm text-gray-500">
+            Your conversation with {`${aiName}`} started.
+          </div>
         </div>
 
         <form
@@ -104,7 +131,7 @@ export default function Home() {
         >
           <input
             aria-label="Enter prompt"
-            className="border rounded-lg border-black m-2 p-2 resize-none w-4/5 h-12 focus:outline-none focus:ring focus:border-blue-500 active:border-blue-500"
+            className="w-4/5 h-12 p-2 m-2 border border-black rounded-lg resize-none focus:outline-none focus:ring focus:border-blue-500 active:border-blue-500"
             value={request}
             onChange={handleChange}
           />
