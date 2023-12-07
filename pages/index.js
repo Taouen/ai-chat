@@ -68,7 +68,7 @@ export default function Home() {
       .then((info) => {
         const reply = {
           id: id,
-          text: info[0].text,
+          text: info.choices[0].message.content,
         };
         responses.unshift(reply);
         setAiResponses(responses);

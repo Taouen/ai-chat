@@ -1,19 +1,20 @@
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAI } from 'openai';
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 export default async function handler(req, res) {
-  const response = await openai.createCompletion('text-curie-001', {
-    prompt: req.body.request,
-    temperature: 0.5,
-    max_tokens: 64,
-    top_p: 1.0,
-    frequency_penalty: 0.5,
-    presence_penalty: 0.0,
-  });
-
-  res.status(200).json(response.data.choices);
+  try {
+    const response = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: req.body.request }],
+      model: 'gpt-3.5-turbo',
+    });
+    console.log(response.choices[0].message.content);
+    res.status(200).send(response);
+  } catch (err) {
+    res.status(500).send({
+      error: `An error occurred: ${err}`,
+    });
+  }
 }

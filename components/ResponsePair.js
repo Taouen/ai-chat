@@ -33,7 +33,7 @@ const ResponsePair = ({ prompt, response, chatColor, error }) => {
       <div className="flex justify-center items-center rounded-lg p-2 my-2 w-max max-w-[80%] bg-gray-200 w-full self-start text-left break-words">
         {response ? (
           response === 'error' ? (
-            'I was unable to think of a response'
+            'I had some trouble formulating a response. Please try again.'
           ) : (
             response
           )
